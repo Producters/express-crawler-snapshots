@@ -1,0 +1,22 @@
+{
+  "name": "express-crawler-snapshots",
+  "version": "0.0.1",
+  "description": "express.js middleware for generating web page html snapshots for web crawlers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express.js",
+    "crawlwer",
+    "bot",
+    "googlebot",
+    "phantomjs",
+    "snapshots"
+  ],
+  "author": "domasx2@gmail.com (https://github.com/domasx2)",
+  "license": "ISC",
+  "dependencies": {
+    "phantom": "^0.7.2"
+  }
+}
