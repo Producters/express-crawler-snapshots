@@ -40,7 +40,7 @@ snapshotTrigger| 'snapshot'  | string, query param, which if present, will trigg
 agents       |see source     | list of UA strings for crawler bots
 shouldRender | snapshot trigger found in query params OR user agent matches one of the agents OR _escaped_fragment_ fonund in query params | function(req, options) { return bool;}
 protocol     | same as request | string, 'http' or 'https'
-domain       | same as request | string. Use this if you want phantomjs to call 'localhost' for example
+domain       | same as request | string. Use this if you want phantomjs to call 'localhost'
 maxInstances | 1               | max number of phantomjs instances to use
 logger       | console         | console-like object that implements 'log', 'warn', 'error' method. Set to null for silent operation
 
