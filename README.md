@@ -25,7 +25,7 @@ var crawlerSnapshots = require('express-crawler-snapshots');
 var app = express();
 
 //make sure you include the middleware before route handlers
-app.use(crawlerSnapshots(/*{options}*/));
+app.use(crawlerSnapshots(/* {options} */));
 
 app.use('/', require('./routes'));
 ```
