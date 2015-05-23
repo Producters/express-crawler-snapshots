@@ -5,6 +5,12 @@ Express Crawler Snapshots
 Express.js middleware that detects search engine bot requests and pre-renders the page on the server using phantomjs, executing any javascript and returning fully rendered static html.  
 Intended for apps where content is rendered primarily using javascript (eg, angular, ember, react based frontend) to make sure that bots get to see the entire content.  
 
+# Install
+
+```sh
+npm install express-crawler-snapshots --save
+```
+
 # Features
 
 * Phantomjs process pooling
