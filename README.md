@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Producters/express-crawler-snapshots.svg)](https://travis-ci.org/Producters/express-crawler-snapshots)
+
 Express Crawler Snapshots
 =====================================
 Express.js middleware that detects search engine bot requests and pre-renders the page on the server using phantomjs, executing any javascript and returning fully rendered static html.  
