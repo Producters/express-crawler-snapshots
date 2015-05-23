@@ -55,4 +55,8 @@ logger       | console         | console-like object that implements 'log', 'war
 
 # Test
 
-TODO  
+```sh
+npm test
+```
+
+Todo: test failure scenarios, stress tests
