@@ -48,7 +48,8 @@ var SETTINGS = {
     makeUrl: makeUrl,
     protocol: null, // 'http' or 'https', by default same as initial request
     host: null,  //domain, by default same as initial request. this is where you can put 'localhost'
-    maxInstances: 1
+    maxInstances: 1,
+    logger: console
 }
 
 

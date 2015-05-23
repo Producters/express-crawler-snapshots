@@ -1,7 +1,7 @@
 Express Crawler Snapshots
 =====================================
 Express.js middleware that detects search engine bot requests and pre-renders the page on the server using phantomjs, executing any javascript and returning fully rendered static html.  
-Intended for apps where content is rendered using javascript (eg, angular, ember, react based frontend), to make sure that bots get to see the entire content.  
+Intended for apps where content is rendered primarily using javascript (eg, angular, ember, react based frontend) to make sure that bots get to see the entire content.  
 
 # Features
 
@@ -9,6 +9,7 @@ Intended for apps where content is rendered using javascript (eg, angular, ember
 * Request queuing when no phantomjs instances are immediately available
 * Automatic search engine bot detection via user agent string
 * '_escaped_fragment_' semantics support
+* Forced timeout for phantomjs page renders
 
 
 # Requirements
@@ -41,6 +42,9 @@ shouldRender | snapshot trigger found in query params OR user agent matches one 
 protocol     | same as request | string, 'http' or 'https'
 domain       | same as request | string. Use this if you want phantomjs to call 'localhost' for example
 maxInstances | 1               | max number of phantomjs instances to use
+logger       | console         | console-like object that implements 'log', 'warn', 'error' method. Set to null for silent operation
+
+
 # Test
 
 TODO  
