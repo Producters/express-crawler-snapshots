@@ -52,7 +52,7 @@ shouldRender | snapshot trigger found in query params OR user agent matches one 
 protocol     | same as request | string, 'http' or 'https'
 domain       | same as request | string. Use this if you want phantomjs to call 'localhost'
 maxInstances | 1               | max number of phantomjs instances to use
-logger       | console         | console-like object that implements 'log', 'warn', 'error' method. Set to null for silent operation
+logger       | console         | object that implements 'info', 'warn', 'error' methods. Set to null for silent operation
 
 # Phantomjs process management
 
