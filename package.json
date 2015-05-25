@@ -13,7 +13,8 @@
     "crawler",
     "googlebot",
     "phantomjs",
-    "snapshots"
+    "snapshots",
+    "seo"
   ],
   "author": "domasx2@gmail.com (https://github.com/domasx2)",
   "license": "ISC",

@@ -1,15 +1,10 @@
 [![Build Status](https://travis-ci.org/Producters/express-crawler-snapshots.svg)](https://travis-ci.org/Producters/express-crawler-snapshots)
+[![Dependency Status](https://www.versioneye.com/user/projects/5563557e366466001bd00100/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5563557e366466001bd00100)
 
 Express Crawler Snapshots
 =====================================
-Express.js middleware that detects search engine bot requests and pre-renders the page on the server using phantomjs, executing any javascript and returning fully rendered static html.  
-Intended for apps where content is rendered primarily using javascript (eg, angular, ember, react based frontend) to make sure that bots get to see the entire content.  
-
-# Install
-
-```sh
-npm install express-crawler-snapshots --save
-```
+This is express.js middleware that intercepts requests coming from search engine crawler bots, renders the requested page & executes javascript on the server using phantomjs and returns rendered static html.  
+It is intended for use on javascript heavy websites, where some or all content is rendered by javascript. Most search engine bots don't execute javascript, so in order for them to index the entire content we need to render it server side.
 
 # Features
 
@@ -19,13 +14,18 @@ npm install express-crawler-snapshots --save
 * '_escaped_fragment_' semantics support
 * Forced timeout for phantomjs page renders
 
-
 # Requirements
 
-Phantomjs 1.3+. "phantomjs" binary must be available on sys path
+Phantomjs 1.3+. "phantomjs" binary must be available on sys path. See http://phantomjs.org/download.html for download & install instructions
 
-# Usage
+# Install
 
+```sh
+npm install express-crawler-snapshots --save
+```
+
+# Use
+Just add it as express middleware, before route handlers
 ```javascript
 
 var crawlerSnapshots = require('express-crawler-snapshots');
@@ -37,6 +37,7 @@ app.use(crawlerSnapshots(/* {options} */));
 
 app.use('/', require('./routes'));
 ```
+Once that is done, open  http://yourapp.com/?snapshot=true and view source to verify that it's working
 
 # Options
 
