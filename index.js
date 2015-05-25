@@ -65,7 +65,7 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
 
     var pool = new Pool(options.maxInstances, options);
 
-   return function expressCrawlerSnapshotsMiddleware(req, res, next) {
+    var middleware = function expressCrawlerSnapshotsMiddleware(req, res, next) {
         if (options.shouldRender(req, options)) {
             pool.getInstance(function (instance, err){
                 if (err) {
@@ -84,6 +84,9 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
             next();
         }
     };
+
+    middleware._pool = pool;
+    return middleware;
 };
 
 module.exports = expressCrawlerSnapshots;

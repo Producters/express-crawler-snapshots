@@ -3,8 +3,9 @@
 
 Express Crawler Snapshots
 =====================================
-This is express.js middleware that intercepts requests coming from search engine crawler bots, renders the requested page & executes javascript on the server using phantomjs and returns rendered static html.  
-It is intended for use on javascript heavy websites, where some or all content is rendered by javascript. Most search engine bots don't execute javascript, so in order for them to index the entire content we need to render it server side.
+If your website  is javascript heavy - it's built using angular, ember, tons of jquery or similar - it renders most or all of it's content using javascript & ajax. This means that javascript-challenged search engine bots don't see much when crawling it.
+
+This is express.js middleware that fixes the problem by intercepting search engine bot requests, rendering the page fully on the server using phantomjs, executing any javascript and returning resulting html. This way bots get to see the full content of the website as if it was static html.
 
 # Features
 
@@ -53,11 +54,16 @@ domain       | same as request | string. Use this if you want phantomjs to call 
 maxInstances | 1               | max number of phantomjs instances to use
 logger       | console         | console-like object that implements 'log', 'warn', 'error' method. Set to null for silent operation
 
+# Phantomjs process management
+
+New phantomjs processes are started when a bot requests comes in, number of active phantomjs processes is < maxInstanes and all active processes are currently rendering a page.   
+If maxInstances is reached, all phantomjs instances are busy and a new request comes in, the request is queued untll a phantomjs instance becomes available. Queue operates on first in, first out basis.  
+If a phantomjs process is killed from outside/dies, it's handled cleaned up gracefully and will be replaced with next request - feel free to kill them on whim :)  
+There's a hard timeout on opening a page and rendering content. If timeout is reached and render is still not complete, phantomjs instance is assumed toe be fubar and is forcefully killed.  
+Note that if an error happens while rendering a page, currently there are no retries - midleware produces an error.
 
 # Test
 
 ```sh
 npm test
 ```
-
-Todo: test failure scenarios, stress tests
