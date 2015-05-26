@@ -54,6 +54,15 @@ domain       | same as request | string. Use this if you want phantomjs to call 
 maxInstances | 1               | max number of phantomjs instances to use
 logger       | console         | object that implements 'info', 'warn', 'error' methods. Set to null for silent operation
 
+# What it does
+
+1. Request passing through middleware is inspected. If it either: contains search engine bot's user agent string, contains 'snaphsot' query param or contains '_escaped_fragment_' query param
+2. Url is edited: if it contains 'snapshot' parameter, it is removed; if it contains '_escaped_fragment_' parameter, it is transformed as per google spec to use "#!"
+3. A phantomjs instance is retrieved from pool; If none are available, request is queued until one becomes available after a previous request completes
+4. Phantomjs renders the page
+5. &lt;script&gt; tags are removed to prevent being execute again by however consumes the result
+6. Resulting html is written to response, phantomjs instance is released to pool 
+
 # Phantomjs process management
 
 New phantomjs processes are started when a bot requests comes in, number of active phantomjs processes is < maxInstanes and all active processes are currently rendering a page.   

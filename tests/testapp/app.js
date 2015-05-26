@@ -6,6 +6,7 @@ function getApp(middleware) {
     app.get('/', function(req, res) {
         res.send('<html><body><p id="content"></p>' + 
             '<script>document.getElementById("content").innerHTML="hello " + "world";</script>' +
+            '<script>console.log("hai")</script>' +
             '</body></html>');
     });
     app.get('/other', function(req, res) {
