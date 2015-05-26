@@ -1,6 +1,7 @@
 var phantom = require('phantom'),
     Pool = require('./lib/pool'),
-    Instance = require('./lib/instance');
+    Instance = require('./lib/instance'),
+    querystring = require('querystring');
 
 var shouldRender = function shouldRender (req, options) {
     if (req.query._escaped_fragment_) {
@@ -22,9 +23,18 @@ var shouldRender = function shouldRender (req, options) {
 
 var makeUrl = function makeUrl(req, options) {
         //construct url that will be called by phantomjs
+
+        //base url
         var url = (options.protocol || req.protocol) + '://' + (options.host || req.get('host'));
+
+        //handle escaped fragment
         if (req.query._escaped_fragment_) {
-            url += req.query._escaped_fragment_;
+            var params = JSON.parse(JSON.stringify(req.query));
+            delete params._escaped_fragment_;
+            params = querystring.stringify(params);
+            url += req.path + (params ? '?' + params : '') + "#!" +  querystring.unescape(req.query._escaped_fragment_);
+
+        //else, just remove snapshot trigger if present
         } else {
             url += req.originalUrl;
             if (options.snapshotTrigger && url.indexOf(options.snapshotTrigger + '=') != -1) {
@@ -67,6 +77,9 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
 
     var middleware = function expressCrawlerSnapshotsMiddleware(req, res, next) {
         if (options.shouldRender(req, options)) {
+            if (options.logger) {
+                options.logger.info("intercepted bot request by [" + req.headers['user-agent'] + "]");
+            }
             pool.getInstance(function (instance, err){
                 if (err) {
                     next(err);

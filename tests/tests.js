@@ -108,12 +108,24 @@ describe('crawler snapshots middleware', function() {
         });
     });
 
-    it('should render page if _escaped_fragment_ query param is provided', function (done) {
+    it('should render page if _escaped_fragment_ query param is provided, unescaping value', function (done) {
         startServer(middleware(), function () {
-            request('http://localhost:3001/?_escaped_fragment_=/other', function(error, response, body) {
+            request('http://localhost:3001/printhref?_escaped_fragment_=key1=value1%26key2=value2', function(error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(200);
-                body.indexOf('<p id="content">other world</p>').should.not.equal(-1);
+                body.indexOf('<p id="content">loc is /printhref#!key1=value1&amp;key2=value2</p>').should.not.equal(-1);
+                server_errors.length.should.equal(0);
+                done();
+            });
+        });
+    });
+
+    it('should render page if _escaped_fragment_ query param is provided, leaving other query params intact', function (done) {
+        startServer(middleware(), function () {
+            request('http://localhost:3001/printhref?dude=persoon&_escaped_fragment_=troll', function(error, response, body) {
+                should.not.exist(error);
+                response.statusCode.should.equal(200);
+                body.indexOf('<p id="content">loc is /printhref?dude=persoon#!troll</p>').should.not.equal(-1);
                 server_errors.length.should.equal(0);
                 done();
             });
