@@ -18,6 +18,13 @@
   ],
   "author": "domasx2@gmail.com (https://github.com/domasx2)",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Producters/express-crawler-snapshots.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Producters/express-crawler-snapshots/issues"
+  },
   "dependencies": {
     "phantom": "^0.7.2"
   },
