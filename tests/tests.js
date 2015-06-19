@@ -75,6 +75,19 @@ describe('crawler snapshots middleware', function() {
         });
     });
 
+    it('should contain html start and end tags', function (done) {
+        startServer(middleware(), function () {
+            request('http://localhost:3001/?snapshot=true', function(error, response, body) {
+                should.not.exist(error);
+                response.statusCode.should.equal(200);
+                body.indexOf('<html').should.not.equal(-1);
+                body.indexOf('</html>').should.not.equal(-1);
+                server_errors.length.should.equal(0);
+                done();
+            });
+        });
+    });
+
 
     it('should render page if alternative snapshot query param is provided', function (done) {
         startServer(middleware({
