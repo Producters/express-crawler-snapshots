@@ -1,6 +1,6 @@
 {
   "name": "express-crawler-snapshots",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "express.js middleware for generating web page html snapshots for web crawlers",
   "main": "index.js",
   "scripts": {
