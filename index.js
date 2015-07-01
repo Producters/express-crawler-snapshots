@@ -52,7 +52,8 @@ var SETTINGS = {
         'R6_FeedFetcher', 'NetcraftSurveyAgent', 'Sogou web spider',
         'bingbot', 'Yahoo! Slurp', 'facebookexternalhit', 'PrintfulBot',
         'msnbot', 'Twitterbot', 'UnwindFetchor', 'YandexBot', 'DuckDuckBot',
-        'Ask Jeeves', 'urlresolver', 'Butterfly', 'TweetmemeBot'
+        'Ask Jeeves', 'urlresolver', 'Butterfly', 'TweetmemeBot',
+        'Google (+https://developers.google.com/+/web/snippet/)' //google +
     ], //user agents to trigger snapshot render on
     shouldRender: shouldRender, //function that determines wether to render snapshot\\
     makeUrl: makeUrl,
