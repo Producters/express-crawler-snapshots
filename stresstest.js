@@ -1,4 +1,5 @@
 var request = require('request'),
+    http = require('http'),
     argv = require('minimist')(process.argv.slice(2)),
     interval = argv.interval || argv.i || 2000;
     simultaneous = argv.simultaneous || argv.s || 1;
@@ -14,11 +15,11 @@ var success = 0, errors = 0, count = 0;
 setInterval(function () {
 
     for(var i = 0; i < simultaneous; i ++) {
-        (function () {
-            console.log('starting request ' + (count++ ));
+        (function (reqNo) {
+            console.log('starting request ' + (reqNo));
             var start = Date.now();
             request({
-                url: url,
+                url: url + '?reqNo=' + reqNo,
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
                 }
@@ -31,9 +32,9 @@ setInterval(function () {
                 } else {
                     success += 1;
                 }
-                console.log('success: ' + success + ' error: '+ errors + ' time: ' + (Date.now() -start));
+                console.log('finished ' + reqNo +' successes: ' + success + ' error: '+ errors + ' time: ' + (Date.now() -start));
             });
-        }) ();
+        }) (++count);
     }
 
 }, interval);
