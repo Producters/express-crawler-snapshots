@@ -29,9 +29,11 @@ describe('crawler snapshots middleware', function() {
 
     afterEach(function (done) {
         if(server) {
-            server.close(done);
-            server = null;
-            server_errors = [];
+            _middleware.killAllInstances().then(function () {
+                server.close(done);
+                server = null;
+                server_errors = [];
+            });
         } else {
             done();
         }
@@ -293,14 +295,13 @@ describe('crawler snapshots middleware', function() {
                 mw._pool.instances_active.should.equal(1);
                 mw._pool.available_instances.length.should.equal(1);
                 //kill the process
-                mw._pool.instances[0].ph.process.kill();
+                mw._pool.instances[0].ph.childProcess.kill();
 
                 //wait for it to die
                 setTimeout(function(){
                     mw._pool.instances.length.should.equal(0);
                     mw._pool.instances_active.should.equal(0);
                     mw._pool.available_instances.length.should.equal(0);
-
                     request('http://localhost:3001/?snapshot=true', function(error, response, body) {
                         should.not.exist(error);
                         response.statusCode.should.equal(200);
@@ -327,7 +328,7 @@ describe('crawler snapshots middleware', function() {
 
         _mw._pool.spawnInstance = function (cb) {
             _mw._pool.constructor.prototype.spawnInstance.call(_mw._pool, function (phantom) {
-                phantom.ph.process.kill('SIGKILL');
+                phantom.ph.childProcess.kill('SIGKILL');
                 cb(phantom);
             });
         };

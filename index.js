@@ -1,7 +1,7 @@
-var phantom = require('phantom'),
-    Pool = require('./lib/pool'),
+var Pool = require('./lib/pool'),
     Instance = require('./lib/instance'),
-    querystring = require('querystring');
+    querystring = require('querystring'),
+    Promise = require('bluebird');
 
 var shouldRender = function shouldRender (req, options) {
     if (req.query._escaped_fragment_) {
@@ -75,6 +75,7 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
     });
 
     var pool = new Pool(options.maxInstances, options);
+    expressCrawlerSnapshots._pools.push(pool);
 
     var middleware = function expressCrawlerSnapshotsMiddleware(req, res, next) {
         if (options.shouldRender(req, options)) {
@@ -102,5 +103,17 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
     middleware._pool = pool;
     return middleware;
 };
+
+expressCrawlerSnapshots._pools = [];
+
+expressCrawlerSnapshots.killAllInstances = function () {
+    return Promise.all(this._pools.map(function (pool) {
+        return pool.killAllInstances();
+    }));
+};
+
+process.on('exit', function () {
+    expressCrawlerSnapshots.killAllInstances();
+});
 
 module.exports = expressCrawlerSnapshots;

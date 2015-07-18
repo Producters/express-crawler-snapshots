@@ -54,6 +54,17 @@ domain       | same as request | string. Use this if you want phantomjs to call 
 maxInstances | 1               | max number of phantomjs instances to use
 logger       | console         | object that implements 'info', 'warn', 'error' methods. Set to null for silent operation
 
+# Kill all phantom instances programtically
+
+In some rare cases you might want to kill all phantomjs instances programatically. For example, a http server won't close if it's serving an app that has this middleware active and some phantomjs instances spawned - the instances are holding onto open connections.
+
+```javascript
+var crawlerSnapshots = require('express-crawler-snapshots');
+crawlerSnapshots.killAllInstances.then(function() {
+   // done
+});
+```
+
 # What it does
 
 1. Request passing through middleware is inspected. If it either: contains search engine bot's user agent string, contains 'snaphsot' query param or contains '_escaped_fragment_' query param
