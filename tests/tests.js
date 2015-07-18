@@ -347,7 +347,7 @@ describe('crawler snapshots middleware', function() {
         });
     });
 
-    it('timeout should terminated phantom process and return error', function (done) {
+    it('timeout should terminate phantom process and return error', function (done) {
         var mw = middleware({
             timeout: 1
         });
