@@ -60,6 +60,7 @@ var SETTINGS = {
     protocol: null, // 'http' or 'https', by default same as initial request
     host: null,  //domain, by default same as initial request. this is where you can put 'localhost'
     maxInstances: 1,
+    attempts: 1,
     logger: console
 }
 
@@ -82,19 +83,36 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
             if (options.logger) {
                 options.logger.info("intercepted bot request by [" + req.headers['user-agent'] + "]");
             }
-            pool.getInstance(function (instance, err){
-                if (err) {
-                    next(err);
-                } else {
-                    instance.renderPage(options.makeUrl(req, options), function (result, err) {
-                        if (err) {
-                            next(err);
-                        } else {
-                            res.send(result);
-                        }
-                    });
-                }
-            });
+
+            var attempt = 1,
+                url = options.makeUrl(req, options);
+
+            function tryRender() {
+                pool.getInstance(function (instance, err){
+                    if (err) {
+                        next(err);
+                    } else {
+                        instance.renderPage(url, function (result, err) {
+                            if (err) {
+
+                                if (attempt < options.attempts) {
+                                    if (options.logger) {
+                                        options.logger.info("attempt #"  + attempt + " to render " + url + " failed: ", err && err.message ? err.message : err, " trying again...");
+                                    }
+                                    attempt += 1;
+                                    tryRender();
+                                } else {
+                                    next(err);
+                                }
+                            } else {
+                                res.send(result);
+                            }
+                        });
+                    }
+                });
+            }
+
+            tryRender();
         } else {
             next();
         }

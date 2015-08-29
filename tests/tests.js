@@ -347,6 +347,43 @@ describe('crawler snapshots middleware', function() {
         });
     });
 
+    it('should make second attempt to render if attempts > 1 and killed the first  time', function (done) {
+        var _mw = middleware({
+            attempts: 2,
+            logger: console
+        }),
+        mw = function(req, res, next) {
+            _mw(req,  res, function (err) {
+                should.not.exist(err);
+                next(err);
+            });
+        };
+
+        var first_killed = false;
+
+        _mw._pool.spawnInstance = function (cb) {
+            _mw._pool.constructor.prototype.spawnInstance.call(_mw._pool, function (phantom) {
+                if (!first_killed) {
+                    phantom.ph.childProcess.kill('SIGKILL');
+                    first_killed = true;
+                }
+                cb(phantom);
+            });
+        };
+
+        startServer(mw, function () {
+            request('http://localhost:3001/?snapshot=true', function(error, response, body) {
+                response.statusCode.should.equal(200);
+                body.indexOf('<p id="content">hello world</p>').should.not.equal(-1);
+                body.indexOf('<script>').should.equal(-1);
+                server_errors.length.should.equal(0);
+                done();
+            });
+        });
+    });
+
+
+
     it('timeout should terminate phantom process and return error', function (done) {
         var mw = middleware({
             timeout: 1
