@@ -61,6 +61,7 @@ var SETTINGS = {
     host: null,  //domain, by default same as initial request. this is where you can put 'localhost'
     maxInstances: 1,
     attempts: 1,
+    loadImages: true,
     logger: console
 }
 

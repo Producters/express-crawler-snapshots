@@ -54,6 +54,7 @@ domain       | same as request | string. Use this if you want phantomjs to call 
 maxInstances | 1               | max number of phantomjs instances to use
 logger       | console         | object that implements 'info', 'warn', 'error' methods. Set to null for silent operation
 attempts     | 1               | number of attempts to render a page, in case phantomjs crashes or times out. Set to > 1 if phantomjs is unstable for you
+loadImages   | true            | should phantom load images. Careful: there's a mem leak with older versions of QT: https://github.com/ariya/phantomjs/issues/11390  
 
 # Kill all phantom instances programtically
 
