@@ -349,8 +349,7 @@ describe('crawler snapshots middleware', function() {
 
     it('should make second attempt to render if attempts > 1 and killed the first  time', function (done) {
         var _mw = middleware({
-            attempts: 2,
-            logger: console
+            attempts: 2
         }),
         mw = function(req, res, next) {
             _mw(req,  res, function (err) {
@@ -402,6 +401,28 @@ describe('crawler snapshots middleware', function() {
                     server_errors.length.should.equal(1);
                     done();
                 }, 100);
+            });
+        });
+    });
+
+    it('if max page loads enabled, should restart instance every x loads', function (done) {
+        var mw = middleware({
+            maxPageLoads: 2
+        });
+
+        startServer(mw, function() {
+            request('http://localhost:3001/?snapshot=true', function () {
+                mw._pool.instances.length.should.equal(1);
+                mw._pool.instances[0].number.should.equal(0);
+                request('http://localhost:3001/?snapshot=true', function () {
+                    mw._pool.instances.length.should.equal(1);
+                    mw._pool.instances[0].number.should.equal(0);
+                    request('http://localhost:3001/?snapshot=true', function () {
+                        mw._pool.instances.length.should.equal(1);
+                        mw._pool.instances[0].number.should.equal(1);
+                        done();
+                    });
+                });
             });
         });
     });

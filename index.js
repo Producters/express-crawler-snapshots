@@ -62,6 +62,7 @@ var SETTINGS = {
     maxInstances: 1,
     attempts: 1,
     loadImages: true,
+    maxPageLoads: 0,
     logger: console
 }
 
