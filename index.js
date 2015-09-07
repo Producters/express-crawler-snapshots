@@ -45,8 +45,8 @@ var makeUrl = function makeUrl(req, options) {
     }
 
 var SETTINGS = {
-    timeout: 2000, //how long to wait for page to load
-    delay: 200, //how long to wait for initial javascript to settle
+    timeout: 10000, //how long to wait for page to load
+    delay: 300, //how long to wait for initial javascript to settle
     snapshotTrigger: 'snapshot', //query param to trigger snapshot render on
     agents: ['Googlebot', 'Baiduspider', 'ia_archiver',
         'R6_FeedFetcher', 'NetcraftSurveyAgent', 'Sogou web spider',
@@ -62,7 +62,7 @@ var SETTINGS = {
     maxInstances: 1,
     attempts: 1,
     loadImages: true,
-    maxPageLoads: 0,
+    maxPageLoads: 100,
     logger: console
 }
 

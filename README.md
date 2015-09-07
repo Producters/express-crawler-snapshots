@@ -3,9 +3,12 @@
 
 Express Crawler Snapshots
 =====================================
-If your website  is javascript heavy - it's built using angular, ember, tons of jquery or similar - it renders most or all of it's content using javascript & ajax. This means that javascript-challenged search engine bots don't see much when crawling it.
 
-This is express.js middleware that fixes the problem by intercepting search engine bot requests, rendering the page fully on the server using phantomjs, executing any javascript and returning resulting html. This way bots get to see the full content of the website as if it was static html.
+The purpose of this express middleware is to pre-render javascript heavy pages for crawlers that can't do execute javacript on their own. It is intended as a drop-in solution with minimal configuration.  
+
+It detects search engine crawler requests by inspect User-Agent header and proxies their requests to a phantomjs instance. Phantomjs render the page fully including any async javascript and resulting static html is proxied back to the crawler.  
+
+Please note, if you use html5 history (no hashbangs) in your application, don't add a `<meta name="fragment" content="!">` tag for this to work correctly.
 
 # Features
 
@@ -44,7 +47,7 @@ Once that is done, open  http://yourapp.com/?snapshot=true and view source to ve
 
 Option       |  Default      | Decription
 -------------|---------------|------------
-timeout      | 2000          | ms, how long to wait for page to load on a phantomjs instance
+timeout      | 10000          | ms, how long to wait for page to load on a phantomjs instance
 delay        |  200          | ms, how long to wait for javascript to settle on the page
 snapshotTrigger| 'snapshot'  | string, query param, which if present, will trigger static page render
 agents       |see source     | list of UA strings for crawler bots
@@ -55,7 +58,7 @@ maxInstances | 1               | max number of phantomjs instances to use
 logger       | console         | object that implements 'info', 'warn', 'error' methods. Set to null for silent operation
 attempts     | 1               | number of attempts to render a page, in case phantomjs crashes or times out. Set to > 1 if phantomjs is unstable for you
 loadImages   | true            | should phantom load images. Careful: there's a mem leak with older versions of QT: https://github.com/ariya/phantomjs/issues/11390  
-maxPageLoads | 0               | if > 0, will kill phantomjs instance after x pages is loaded. Useful to work around mem leaks
+maxPageLoads | 100               | if > 0, will kill phantomjs instance after x pages is loaded. Useful to work around mem leaks
 
 # Kill all phantom instances programtically
 
