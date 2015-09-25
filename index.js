@@ -1,7 +1,8 @@
 var Pool = require('./lib/pool'),
     Instance = require('./lib/instance'),
     querystring = require('querystring'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
+    cacheClient = require("cache-client");
 
 var shouldRender = function shouldRender (req, options) {
     if (req.query._escaped_fragment_) {
@@ -63,7 +64,8 @@ var SETTINGS = {
     attempts: 1,
     loadImages: true,
     maxPageLoads: 100,
-    logger: console
+    logger: console,
+    cache: null
 }
 
 
@@ -79,6 +81,10 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
 
     var pool = new Pool(options.maxInstances, options);
     expressCrawlerSnapshots._pools.push(pool);
+
+    if (options.cache) {
+        cacheClient.setup(options.cache);
+    }
 
     var middleware = function expressCrawlerSnapshotsMiddleware(req, res, next) {
         if (options.shouldRender(req, options)) {
@@ -107,6 +113,10 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
                                     next(err);
                                 }
                             } else {
+                                if (options.cache) {
+                                    options.logger.info("caching output of " + url);
+                                    cacheClient.write(url, result, options.cache.ttl);
+                                }
                                 res.send(result);
                             }
                         });
@@ -114,7 +124,18 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
                 });
             }
 
-            tryRender();
+            if (options.cache) {
+                cacheClient.read(url, function(result) {
+                    if (result) {
+                        options.logger.info("using cached value for " + url);
+                        return res.send(result);
+                    }
+                    options.logger.info("cache miss for " + url);
+                    tryRender();
+                });
+            } else {
+                tryRender();
+            }
         } else {
             next();
         }
