@@ -86,6 +86,12 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
         cacheClient.setup(options.cache);
     }
 
+    function log() {
+        if (options.logger) {
+            options.logger.info.apply(options.logger, arguments);
+        }
+    }
+
     var middleware = function expressCrawlerSnapshotsMiddleware(req, res, next) {
         if (options.shouldRender(req, options)) {
             if (options.logger) {
@@ -104,9 +110,7 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
                             if (err) {
 
                                 if (attempt < options.attempts) {
-                                    if (options.logger) {
-                                        options.logger.info("attempt #"  + attempt + " to render " + url + " failed: ", err && err.message ? err.message : err, " trying again...");
-                                    }
+                                    log("attempt #"  + attempt + " to render " + url + " failed: ", err && err.message ? err.message : err, " trying again...");
                                     attempt += 1;
                                     tryRender();
                                 } else {
@@ -114,7 +118,7 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
                                 }
                             } else {
                                 if (options.cache) {
-                                    options.logger.info("caching output of " + url);
+                                    log("caching output of " + url);
                                     cacheClient.write(url, result, options.cache.ttl);
                                 }
                                 res.send(result);
@@ -127,10 +131,10 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
             if (options.cache) {
                 cacheClient.read(url, function(result) {
                     if (result) {
-                        options.logger.info("using cached value for " + url);
+                        log("using cached value for " + url);
                         return res.send(result);
                     }
-                    options.logger.info("cache miss for " + url);
+                    log("cache miss for " + url);
                     tryRender();
                 });
             } else {

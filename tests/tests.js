@@ -426,4 +426,32 @@ describe('crawler snapshots middleware', function() {
             });
         });
     });
+
+    it('should use cache if configured', function (done) {
+        var mw = middleware({
+            cache: {store: "memory", opts:{}}
+        });
+
+        sinon.spy(mw._pool, 'getInstance');
+
+        startServer(mw, function() {
+            request('http://localhost:3001/?snapshot=true', function (error, response, body) {
+                should.not.exist(error);
+                response.statusCode.should.equal(200);
+                request('http://localhost:3001/?snapshot=true', function (error, response, body2) {
+                    should.not.exist(error);
+                    response.statusCode.should.equal(200);
+                    mw._pool.getInstance.calledOnce.should.be.exactly(true);
+                    body.should.equal(body2);
+                    request('http://localhost:3001/other?snapshot=true', function (error, response, body3) {
+                        should.not.exist(error);
+                        response.statusCode.should.equal(200);
+                        mw._pool.getInstance.calledTwice.should.be.exactly(true);
+                        body.should.not.equal(body3);
+                        done();
+                    });
+                });
+            });
+        });
+    });
 });
