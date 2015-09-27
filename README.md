@@ -17,6 +17,7 @@ Please note, if you use html5 history (no hashbangs) in your application, don't 
 * Automatic search engine bot detection via user agent string
 * '_escaped_fragment_' semantics support
 * Forced timeout for phantomjs page renders
+* Optional caching
 
 # Requirements
 
@@ -59,6 +60,7 @@ logger       | console         | object that implements 'info', 'warn', 'error' 
 attempts     | 1               | number of attempts to render a page, in case phantomjs crashes or times out. Set to > 1 if phantomjs is unstable for you
 loadImages   | true            | should phantom load images. Careful: there's a mem leak with older versions of QT: https://github.com/ariya/phantomjs/issues/11390  
 maxPageLoads | 100               | if > 0, will kill phantomjs instance after x pages is loaded. Useful to work around mem leaks
+cache        | undefined       | options object compatible with [cache-client](https://www.npmjs.com/package/cache-client). If provided, enables caching
 
 # Kill all phantom instances programtically
 
