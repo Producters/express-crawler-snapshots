@@ -26,7 +26,7 @@
     "url": "https://github.com/Producters/express-crawler-snapshots/issues"
   },
   "dependencies": {
-    "bluebird": "^2.9.34",
+    "bluebird": "^3.0.6",
     "cache-client": "0.0.22",
     "phridge": "^1.1.0"
   },

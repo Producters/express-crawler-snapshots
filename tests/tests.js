@@ -337,7 +337,7 @@ describe('crawler snapshots middleware', function() {
             request('http://localhost:3001/?snapshot=true', function(error, response, body) {
                 should.not.exist(error);
                 response.statusCode.should.equal(500);
-                body.indexOf('exited without finishing render').should.not.equal(-1);
+                body.indexOf('PhantomJS exited unexpectedly').should.not.equal(-1);
                 _mw._pool.instances.length.should.equal(0);
                 _mw._pool.instances_active.should.equal(0);
                 _mw._pool.available_instances.length.should.equal(0);
