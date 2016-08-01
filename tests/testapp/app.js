@@ -19,6 +19,17 @@ function getApp(middleware) {
             '<script>document.getElementById("content").innerHTML="loc is " + "/printhref" + location.href.split("/printhref")[1];</script>' +
             '</body></html>');
     });
+    app.get('/consoleinfo', function(req, res) {
+        res.send('<html><body><p id="content">logging to console</p>' + 
+            '<script>console.log("hello world");</script>' +
+            '</body></html>');
+    });
+    app.get('/consoleerror', function(req, res) {
+        res.send('<html><body><p id="content">spawning error</p>' + 
+            '<script>var c = b.d;</script>' +
+            '</body></html>');
+    });
+
     return app;
 }
 

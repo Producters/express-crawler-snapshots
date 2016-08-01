@@ -1,8 +1,7 @@
 var Pool = require('./lib/pool'),
     Instance = require('./lib/instance'),
     querystring = require('querystring'),
-    Promise = require('bluebird'),
-    cacheClient = require("cache-client");
+    Promise = require('bluebird');
 
 var shouldRender = function shouldRender (req, options) {
     if (req.query._escaped_fragment_) {
@@ -83,7 +82,7 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
     expressCrawlerSnapshots._pools.push(pool);
 
     if (options.cache) {
-        cacheClient.setup(options.cache);
+        console.warn('caching disabled due to lib problem, write me if you need it');
     }
 
     function log() {
@@ -117,10 +116,6 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
                                     next(err);
                                 }
                             } else {
-                                if (options.cache) {
-                                    log("caching output of " + url);
-                                    cacheClient.write(url, result, options.cache.ttl);
-                                }
                                 res.send(result);
                             }
                         });
@@ -128,18 +123,7 @@ var expressCrawlerSnapshots = function expressCrawlerSnapshots(options) {
                 });
             }
 
-            if (options.cache) {
-                cacheClient.read(url, function(result) {
-                    if (result) {
-                        log("using cached value for " + url);
-                        return res.send(result);
-                    }
-                    log("cache miss for " + url);
-                    tryRender();
-                });
-            } else {
-                tryRender();
-            }
+            tryRender();
         } else {
             next();
         }
