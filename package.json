@@ -1,6 +1,6 @@
 {
   "name": "express-crawler-snapshots",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "express.js middleware for generating web page html snapshots for web crawlers",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "bluebird": "^3.0.6",
-    "phridge": "^1.1.0"
+    "phridge": "^2.0.0"
   },
   "devDependencies": {
     "express": "^4.12.4",
