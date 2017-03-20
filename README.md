@@ -10,6 +10,7 @@ It detects search engine crawler requests by inspect User-Agent header and proxi
 
 Please note, if you use html5 history (no hashbangs) in your application, don't add a `<meta name="fragment" content="!">` tag for this to work correctly.
 
+
 # Features
 
 * Phantomjs process pooling
@@ -80,7 +81,7 @@ crawlerSnapshots.killAllInstances.then(function() {
 3. A phantomjs instance is retrieved from pool; If none are available, request is queued until one becomes available after a previous request completes
 4. Phantomjs renders the page
 5. &lt;script&gt; tags are removed to prevent being execute again by however consumes the result
-6. Resulting html is written to response, phantomjs instance is released to pool 
+6. Resulting html is written to response, phantomjs instance is released to pool
 
 # Phantomjs process management
 
