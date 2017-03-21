@@ -4,7 +4,7 @@
   "description": "express.js middleware for generating web page html snapshots for web crawlers",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha tests"
+    "test": "./node_modules/mocha/bin/mocha --timeout 5000 tests"
   },
   "keywords": [
     "express.js",
